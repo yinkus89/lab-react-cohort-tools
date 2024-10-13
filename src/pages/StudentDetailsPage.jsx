@@ -1,19 +1,24 @@
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom"; // Import useParams and useNavigate
 import placeholderImage from "./../assets/placeholder.png";
 import studentsData from "./../assets/students.json";
 
 function StudentDetailsPage() {
+  // Get the studentId from the URL parameters using useParams
+  const { studentId } = useParams();
 
-  // Find the current student profile by id.
-  // In this case, the student with id 1. The `studentId` is hard-coded for now.
-  // This could be a URL parameter from React Router, e.g. /students/:studentId
-  const studentId = "1";
-  const studentProfile = studentsData.find((student) => student._id === studentId);
+  // Find the student using the dynamic studentId from the URL
+  const studentProfile = studentsData.find(
+    (student) => student._id === studentId
+  );
+
+  const navigate = useNavigate(); // Hook to programmatically navigate (used for the back button)
 
   return (
     <div className="StudentDetailsPage bg-gray-100 py-6 px-4 border-2 border-fuchsia-500 m-2">
       <h1>Student Details Page</h1>
       <div className="bg-white p-8 rounded-lg shadow-md mb-6">
-        {studentProfile && (
+        {studentProfile ? (
           <>
             <img
               src={studentProfile.image || placeholderImage}
@@ -65,13 +70,16 @@ function StudentDetailsPage() {
               </p>
             </div>
 
-
             {/* Back button */}
-            <button className="text-white px-4 py-2 rounded bg-green-500 hover:bg-green-600 transition duration-300 ease-in-out">
+            <button
+              className="text-white px-4 py-2 rounded bg-green-500 hover:bg-green-600 transition duration-300 ease-in-out"
+              onClick={() => navigate("/")} // Navigate back to the HomePage when clicked
+            >
               Back
             </button>
-
           </>
+        ) : (
+          <p>Student not found</p>
         )}
       </div>
     </div>
